@@ -1,0 +1,28 @@
+CREATE TABLE ar(radius INT,area DECIMAL(10,3));
+
+DROP PROCEDURE IF EXISTS areaofcircle;
+
+DELIMITER $$
+
+CREATE PROCEDURE areaofcircle()
+BEGIN
+
+	DECLARE r INT DEFAULT 5;
+	DECLARE a DECIMAL(10,3);
+
+		my_loop : LOOP
+			IF r > 9 THEN 
+			LEAVE my_loop;
+			END IF;
+			INSERT INTO ar
+			VALUES(r,r*r*3.14);
+			SET r=r+1;
+		END LOOP;
+
+END $$
+
+DELIMITER ;
+
+call areaofcircle();
+
+select * from ar;

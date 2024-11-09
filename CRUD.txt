@@ -1,0 +1,10 @@
+db.createCollection("Info");
+use student;
+db.Info.insertOne({roll : 1,name : 'Harsh',marks : 69});
+db.Info.insertMany([{rollno : 2,name:'sujal',marks: 50},{rollno:3,name:'atharv',marks:44}]);
+db.Info.find({marks:{$gt:51}}).pretty();
+db.Info.updateOne({rollno:3},{$set:{marks:90}});
+db.Info.deleteOne({rollno:2});
+db.Info.find({$and:[{"Rollno":2},{"Marks":20}]});
+db.Info.find({$nor:[{"Rollno":3},{"Marks":20}]});
+db.Info.find({$or:[{"Rollno":2},{"Marks":90}]});

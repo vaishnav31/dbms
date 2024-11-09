@@ -1,0 +1,35 @@
+CREATE TABLE lib_book(bid INT,bname VARCHAR(50),qty INT);
+INSERT INTO lib_book VALUES(1,'DBMS',10),(2,'CNS',30),(3,'SPOS',60),(4,'SPM',55);
+CREATE TABLE lib_Audit(bid INT, bname VARCHAR(40),qty INT);
+drop trigger if exists Make_audit1;
+
+delimiter //
+
+CREATE TRIGGER Make_audit1
+  AFTER DELETE ON lib_book
+  FOR EACH ROW
+BEGIN
+  INSERT INTO lib_Audit (bid, bname, qty)
+  VALUES (OLD.bid, OLD.bname,OLD.qty);
+END;
+//
+
+delimiter ;
+
+drop trigger if exists Make_audit2;
+
+delimiter //
+
+CREATE TRIGGER Make_audit2
+  AFTER UPDATE ON lib_book
+  FOR EACH ROW
+BEGIN
+  INSERT INTO lib_Audit (bid, bname, qty)
+  VALUES (OLD.bid, OLD.bname,OLD.qty);
+END;
+//
+
+delimiter ;
+UPDATE lib_book SET qty=100 WHERE bname='DBMS';
+SELECT * FROM lib_book;
+SELECT * FROM lib_Audit;

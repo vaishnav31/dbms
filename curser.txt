@@ -1,0 +1,39 @@
+ CREATE TABLE O_Roll_Call(Rollno INT, Name VARCHAR(50));
+INSERT INTO O_Roll_Call VALUES(1,'Harsh'),(2,'Sujal'),(3,'Atharv'),(4,'Krishna');
+CREATE TABLE N_Roll_Call(Rollno INT , Name VARCHAR(50));
+INSERT INTO N_Roll_Call VALUES(1,'Harsh'),(4,'Atharv'),(5,'Prathmesh'),(6,'Sushant');
+DROP PROCEDURE IF EXISTS merge;
+
+DELIMITER //
+CREATE PROCEDURE merge()
+BEGIN
+	DECLARE roll INT;
+	DECLARE name VARCHAR(40);
+	DECLARE done BOOLEAN DEFAULT FALSE;
+
+	DECLARE cur CURSOR FOR SELECT * FROM O_Roll_Call WHERE Rollno NOT IN (SELECT Rollno FROM N_Roll_Call);
+
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+	OPEN cur;
+	my_loop : LOOP
+
+		FETCH cur INTO roll,name;
+
+		IF done THEN
+			LEAVE my_loop;
+		END IF;
+		INSERT INTO N_Roll_Call VALUES(roll,name);
+
+	END LOOP;
+	CLOSE cur;
+
+END //
+
+DELIMITER ;
+
+call merge();
+
+select * from O_Roll_Call;
+
+select * from N_Roll_Call;

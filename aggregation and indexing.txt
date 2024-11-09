@@ -1,0 +1,10 @@
+db.Student.insert({Name:"Chanchala",Rollno:1,Marks:95,Branch:"Computer"});
+db.Student.insert({Name:"John",Rollno:2,Marks:90,Branch:"Computer"});
+db.Student.insert({Name:"Sanem",Rollno:3,Marks:80,Branch:"IT"}); 
+db.Student.insert({Name:"Laila",Rollno:4,Marks:85,Branch:"IT"}); 
+db.st.aggregate([{$group : {_id : "$Branch", Total_Marks : {$sum : "$Marks"}}}]);
+ db.st.aggregate([{$group : {_id : "$Branch", Average_Marks : {$avg : "$Marks"}}}]);
+db.Student.aggregate([{$group : {_id : "$Branch", Minimum_Marks : {$min : "$Marks"}}}]);  
+db.Student.aggregate([{$group : {_id : "$Branch", Max_Marks : {$max : "$Marks"}}}]); 
+ db.st.createIndex({Branch:1}); 
+db.st.createIndex({Name:1}); 

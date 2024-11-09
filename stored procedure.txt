@@ -1,0 +1,54 @@
+CREATE TABLE Stud_Marks(Name VARCHAR(30) , Total_Marks INT);
+CREATE TABLE Result(Rollno INT PRIMARY KEY AUTO_INCREMENT,Name VARCHAR(30) , Class VARCHAR(30));
+
+INSERT INTO Stud_Marks VALUES('Krish',1000),('Harsh',950),('Sujal',830),('Atharv',100),('Hitesh',1400);
+
+DROP PROCEDURE IF EXISTS proc_Grade;
+
+DELIMITER //
+CREATE PROCEDURE proc_Grade()
+
+BEGIN
+	DECLARE nam VARCHAR(30);
+	DECLARE mark INT;
+	DECLARE done BOOLEAN DEFAULT FALSE;
+
+	DECLARE cur CURSOR FOR SELECT * FROM Stud_Marks;
+	
+	DECLARE CONTINUE HANDLER FOR NOT FOUND 
+		SET done = TRUE;
+
+	OPEN cur;
+	my_loop : LOOP
+		
+		FETCH cur INTO nam,mark;
+		
+		IF done THEN
+			LEAVE my_loop;
+		END IF;
+
+		IF mark <= 1500 AND mark >= 990 THEN
+			INSERT INTO Result(Name,Class) VALUES(nam,'Distinction');
+		ELSEIF mark <= 989 AND mark >= 900 THEN
+			INSERT INTO Result(Name,Class) VALUES(nam,'First Class');
+		ELSEIF mark <= 899 AND mark >= 825 THEN
+			INSERT INTO Result(Name,Class) VALUES(nam,'Higher Second Class');
+		ELSE 
+			INSERT INTO Result(Name,Class) VALUES(nam,'No Class');
+
+		END IF;
+	
+
+	END LOOP;
+	CLOSE cur;
+
+
+END //
+
+DELIMITER ;
+
+call proc_Grade();
+
+select * from result;
+
+select * from Stud_Marks;

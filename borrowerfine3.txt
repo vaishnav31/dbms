@@ -1,0 +1,66 @@
+CREATE TABLE Borrower(
+ 	Roll_no INT PRIMARY KEY,
+ 	Name VARCHAR(30),
+ 	Date_of_issue DATE, 
+ 	Name_of_book VARCHAR(30), 
+ 	Status CHAR
+);
+
+CREATE TABLE Fine(
+	Roll_no INT PRIMARY KEY,
+	Date DATE,
+	Amount INT
+);
+
+INSERT INTO Borrower VALUES(1,'Harsh','2024-04-10','Angels and Demons','I'),
+(2,'Sujal','2024-06-14','Mathematics','I'),
+(3,'Prathamesh','2024-09-19','Angels and Demons','R'),
+(4,'Krish' , '2024-11-1', 'The Philosopher','I'),
+(5,'Hitesh','2024-10-3','Dictionary','I');
+
+
+DROP PROCEDURE IF EXISTS fine_calc;
+DELIMITER //
+CREATE PROCEDURE fine_calc(IN r INT, IN n VARCHAR(30))
+BEGIN
+	DECLARE doi DATE;
+	DECLARE diff INT;
+	DECLARE amt INT;
+	DECLARE stat CHAR; 
+	
+	DECLARE EXIT HANDLER FOR NOT FOUND
+	BEGIN
+		SELECT "Record Not found!" as Message;
+	END;
+
+	SELECT Status INTO stat FROM Borrower WHERE Roll_no = r;
+
+	IF stat LIKE 'R' THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Book has been already returned!';	
+	ELSE
+
+		SELECT Date_of_issue INTO doi FROM Borrower WHERE Roll_no = r AND Name_of_book Like n;
+
+		SET diff = DATEDIFF(NOW(),doi);
+
+		IF diff > 30 THEN
+			SET amt = diff * 30;
+		ELSEIF diff >= 15 AND diff <= 30 THEN
+			SET amt = diff * 5;
+		ELSE 
+			SET amt = 0;
+		END IF;
+
+		UPDATE Borrower SET Status = 'R' WHERE Roll_no = r;
+
+		INSERT INTO Fine VALUES(r,doi,amt);
+	END IF;
+
+END //
+DELIMITER ;
+
+select * from Borrower;
+CALL fine_calc(1,'Angels and Demons');
+CALL fine_calc(2,'Mathematics');
+CALL fine_calc(4,'The Philosopher');
+select * from Borrower;

@@ -1,0 +1,10 @@
+CREATE TABLE Student_Mark(Rollno INT PRIMARY KEY,Name VARCHAR(50) NOT NULL,Marks INT,Branch VARCHAR(20));
+ INSERT INTO Student_Mark VALUES(1,'Ravi',90,'Computer'),(2,'Vedika',70,'Computer'),(3,'Aarush',95,'IT'),(4,'Jyoti',60,'IT');
+SELECT * FROM Student_mark WHERE Marks > 70;
+SELECT * FROM Student_mark WHERE Marks < 70;
+SELECT * FROM Student_mark WHERE Marks = 70 AND Name='Vedika';
+UPDATE Student_mark SET Name='Sachin' WHERE Rollno=1;
+SELECT * FROM Student_Mark;
+DELETE FROM Student_Mark WHERE name='Aarush';
+SELECT * FROM Student_mark WHERE Marks=(SELECT MAX(marks) FROM Student_Mark);
+SELECT Branch, MIN(Marks) AS MINIMUM, MAX(Marks) AS Maximum,AVG(Marks) AS AVERAGE,SUM(Marks) AS SUM,COUNT(Branch) AS Count FROM Student_Mark GROUP BY Branch;

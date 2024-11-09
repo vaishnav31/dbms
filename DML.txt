@@ -1,0 +1,32 @@
+create table student(roll_no int primary key,name char(20),address char(40),phone int(10),age int(2));
+insert into student values(1,'vaish','nashik','1111111',18);
+
+insert into student values(2,'mangu','pune','222222',20);
+
+insert into student values(3,'virat','india','333333',22);
+
+insert into student values(4,'piyush','akola','444444',23);
+
+insert into student values(5,'rakesh','jalgaon','666666',24);
+create table studentcourse(cid int(1),roll_no int,foreign key(roll_no) references student (roll_no));
+insert into studentcourse values(1,1);
+insert into studentcourse values(2,2);
+insert into studentcourse values(2,3);
+insert into studentcourse values(3,4);
+insert into studentcourse values(1,5);
+select * from student inner join studentcourse on student.roll_no=studentcourse.roll_no;
+select * from student right join studentcourse on student.roll_no=studentcourse.roll_no;
+select * from student left join studentcourse on student.roll_no=studentcourse.roll_no;
+select * from student join studentcourse;
+
+select a.name,b.roll_no from student a, student b where a.age<b.age order by a.name;
+create view newview as student.name,student.roll_no,studentcourse.cid from student left join student  course on student.roll_no=studentcourse.roll_no;
+select * from newview;
+select * from student where roll_no in (select roll_no from studentcourse); 
+
+
+
+
+
+
+

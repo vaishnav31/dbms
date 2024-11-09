@@ -1,0 +1,17 @@
+ 
+CREATE TABLE Customer(Account_no INT PRIMARY KEY,Name VARCHAR(50) NOT NULL,Balance DECIMAL(10,3),City VARCHAR(30));
+INSERT INTO Customer VALUES(1,'RAM',10000,'Pune'),(2,'Ravi',25000,'Nasik'),(3,'Sachin',30000,'Mumbai');
+CREATE VIEW Balance_above_20000 AS SELECT * FROM Customer WHERE Balance > 20000;
+CREATE VIEW customer_of_nashik AS SELECT * FROM Customer WHERE City='Nasik' AND Balance > 20000;
+ CREATE INDEX index_name ON Customer(Name);
+SHOW INDEX FROM Customer;
+CREATE TABLE Loan(Loan_no INT,Name VARCHAR(50),Loan_Amount INT);
+INSERT INTO Loan VALUES(1,'RAM',10000),(2,'Ravi',50000),(4,'Dipak',40000);
+CREATE INDEX index1 ON Customer(Account_no,Name);
+SHOW INDEX FROM Customer;
+SELECT * FROM Customer ORDER BY Balance ASC;
+SELECT * FROM Loan ORDER BY Loan_amount DESC;
+SELECT Name,Loan_amount,Loan_amount*2*20 AS Interest_After_20years FROM Loan;
+SELECT Name FROM Customer UNION SELECT Name FROM Loan;
+SELECT Name FROM Customer INTERSECT SELECT Name FROM Loan;
+SELECT Name FROM Customer WHERE Name NOT IN(SELECT Name FROM Loan);
